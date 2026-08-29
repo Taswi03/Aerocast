@@ -180,11 +180,11 @@ def get_weather():
 
     except requests.RequestException as e:
 
-        print("Weather API error:", e)
+        print("WEATHER API ERROR:", repr(e), flush=True)
 
     return jsonify({
         "error": "Unable to get weather data",
-        "details": str(e)
+        "details": repr(e)
     }), 500
 
     # --------------------------------------------------
