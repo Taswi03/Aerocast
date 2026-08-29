@@ -30,9 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Ask Flask for weather data
         const response = await fetch(
-          `http://127.0.0.1:5000/api/weather?city=${encodeURIComponent(city)}`
+         'https://aerocast-ajfq.onrender.com/api/weather?city=${encodeURIComponent(city)}'
         );
-
 
         // Convert response into JavaScript object
         const data = await response.json();
