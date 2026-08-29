@@ -108,10 +108,13 @@ def get_weather():
     try:
 
         geocoding_response = requests.get(
-            geocoding_url,
-            params=geocoding_params,
-            timeout=10
-        )
+    geocoding_url,
+    params=geocoding_params,
+    headers={
+        "User-Agent": "AeroCast/1.0"
+    },
+    timeout=10
+)
 
         geocoding_response.raise_for_status()
 
@@ -168,10 +171,13 @@ def get_weather():
     try:
 
         weather_response = requests.get(
-            weather_url,
-            params=weather_params,
-            timeout=10
-        )
+    weather_url,
+    params=weather_params,
+    headers={
+        "User-Agent": "AeroCast/1.0"
+    },
+    timeout=10
+)
 
         weather_response.raise_for_status()
 
