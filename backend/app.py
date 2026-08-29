@@ -177,19 +177,17 @@ def get_weather():
 
         weather_data = weather_response.json()
 
+    except requests.RequestException as error:
 
-    except requests.RequestException as e:
+        print("WEATHER API ERROR:", repr(error), flush=True)
 
-        print("WEATHER API ERROR:", repr(e), flush=True)
+        return jsonify({
+            "error": "Unable to get weather data",
+            "details": repr(error)
+        }), 500
 
-    return jsonify({
-        "error": "Unable to get weather data",
-        "details": repr(e)
-    }), 500
 
-    # --------------------------------------------------
-    # STEP 3: Extract weather information
-    # --------------------------------------------------
+ 
 
     current_weather = weather_data["current"]
 
