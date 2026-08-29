@@ -1,0 +1,571 @@
+/* =============================================================
+   1. RESET / BASE
+============================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Colors */
+  --bg-body: #05060d;
+  --bg-card: #12131f;
+  --bg-card-alt: #14151f;
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-soft: rgba(255, 255, 255, 0.09);
+
+  --text-primary: #f5f6fa;
+  --text-secondary: #8b8fa3;
+  --text-muted: #6b6f83;
+
+  --accent-cyan: #35d0e0;
+  --accent-blue: #5aa7ff;
+  --accent-yellow: #f2c14e;
+
+  --shadow-card: 0 20px 45px rgba(0, 0, 0, 0.45);
+
+  /* Radii */
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+
+  /* Fonts */
+  --font-main: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(circle at 15% 0%, #0b0d18 0%, var(--bg-body) 55%);
+  font-family: var(--font-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 45px 60px 60px;
+}
+
+/* =============================================================
+   2. HEADER
+============================================================= */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #121826;
+  border: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+}
+
+.brand-name {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* =============================================================
+   3. SEARCH BAR
+============================================================= */
+.search-bar {
+  width: 430px;
+  max-width: 100%;
+  height: 47px;
+  background: #14162280;
+  background-color: #14152180;
+  background: linear-gradient(180deg, #171827 0%, #12131e 100%);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 6px 0 18px;
+}
+
+.search-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 14px;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.find-btn {
+  height: 35px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: #23263a;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.find-btn:hover {
+  background: #2c2f47;
+}
+
+/* =============================================================
+   4. MAIN LAYOUT
+============================================================= */
+.main {
+  display: grid;
+  grid-template-columns: 448px 1fr;
+  gap: 26px;
+  align-items: start;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* =============================================================
+   5. WEATHER CARD (left)
+============================================================= */
+.weather-card {
+  width: 100%;
+  min-height: 520px;
+  background: linear-gradient(160deg, #14152a 0%, #101120 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 34px 34px 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.city-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.local-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.local-time svg {
+  color: var(--accent-cyan);
+  flex-shrink: 0;
+}
+
+.temp-section {
+  margin-top: 90px;
+}
+
+.temp-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6d7690;
+  margin-bottom: 14px;
+}
+
+.temp-value {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.temp-main {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.temp-sub {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding-bottom: 6px;
+}
+
+.warning-box {
+  margin-top: auto;
+  width: 100%;
+  max-width: 376px;
+  min-height: 39px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  background: rgba(242, 193, 78, 0.08);
+  border: 1px solid rgba(242, 193, 78, 0.35);
+  border-radius: var(--radius-md);
+  color: var(--accent-yellow);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.warning-box svg {
+  flex-shrink: 0;
+}
+
+/* =============================================================
+   6. STORM CARD (right)
+============================================================= */
+.storm-card {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+
+  /* Replace with your storm photo: background-image: url("assets/storm.jpg"); */
+  background-image:
+    linear-gradient(180deg, rgba(5,6,13,0.15) 0%, rgba(5,6,13,0.35) 45%, rgba(5,6,13,0.92) 100%),
+    radial-gradient(circle at 50% 38%, #4a4a52 0%, #2c2d38 30%, #16171f 60%, #0a0a10 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+.storm-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  background: rgba(10, 11, 18, 0.75);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  backdrop-filter: blur(4px);
+}
+
+.storm-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-yellow);
+  box-shadow: 0 0 8px var(--accent-yellow);
+}
+
+.storm-content {
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  bottom: 22px;
+}
+
+.storm-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.storm-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #b9c2d6;
+  max-width: 460px;
+}
+
+/* =============================================================
+   7. STATISTIC CARDS
+============================================================= */
+.stat-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.stat-card {
+  background: linear-gradient(160deg, #14152a 0%, #101120 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 16px 18px;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.stat-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #171a2b;
+  flex-shrink: 0;
+}
+
+.icon-humidity {
+  color: var(--accent-cyan);
+}
+
+.icon-wind {
+  color: var(--accent-blue);
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* =============================================================
+   8. RESPONSIVE
+============================================================= */
+@media (max-width: 1050px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-card {
+    min-height: unset;
+  }
+
+  .temp-section {
+    margin-top: 50px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 28px 20px 40px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .weather-card,
+  .storm-card {
+    padding: 26px 22px 24px;
+  }
+
+  .storm-card {
+    height: 320px;
+    padding: 0;
+  }
+
+  .temp-main {
+    font-size: 52px;
+  }
+
+  .stat-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .warning-box {
+    max-width: 100%;
+  }
+}
+/* =========================================
+   MOBILE RESPONSIVE DESIGN
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  /* Main page spacing */
+  .page {
+    padding: 20px;
+  }
+
+
+  /* Header */
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+
+  /* Logo */
+  .brand {
+    justify-content: center;
+  }
+
+
+  /* Search bar */
+  .search-bar {
+    width: 100%;
+  }
+
+
+  .search-input {
+    min-width: 0;
+    width: 100%;
+  }
+
+
+  /* Main content */
+  .main {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+
+  /* Weather card */
+  .weather-card {
+    width: 100%;
+  }
+
+
+  /* Right column */
+  .right-column {
+    width: 100%;
+  }
+
+
+  /* Temperature */
+  .temp-main {
+    font-size: 64px;
+  }
+
+
+  /* Stat cards */
+  .stat-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+
+  /* Storm card */
+  .storm-card {
+    width: 100%;
+  }
+
+}
+
+
+/* =========================================
+   SMALL PHONES
+   ========================================= */
+
+@media (max-width: 480px) {
+
+  .page {
+    padding: 14px;
+  }
+
+
+  .header {
+    gap: 16px;
+  }
+
+
+  /* Stack the search input and button */
+  .search-bar {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+
+  .search-input {
+    flex: 1;
+    min-width: 150px;
+  }
+
+
+  .find-btn {
+    padding: 10px 16px;
+  }
+
+
+  /* Smaller temperature */
+  .temp-main {
+    font-size: 52px;
+  }
+
+
+  .temp-sub {
+    font-size: 18px;
+  }
+
+
+  /* Stack humidity and wind */
+  .stat-cards {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* Prevent long text from overflowing */
+  .storm-title,
+  .storm-desc,
+  .city-name,
+  .weather-message {
+    overflow-wrap: break-word;
+  }
+
+}
