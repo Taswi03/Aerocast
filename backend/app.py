@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -8,9 +9,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-# --------------------------------------------------
-# Convert Open-Meteo weather codes into descriptions
-# --------------------------------------------------
 
 def get_weather_condition(code):
 
@@ -92,152 +90,113 @@ def get_weather():
 
 
     # --------------------------------------------------
-    # STEP 1: Find latitude and longitude of the city
+    # OpenWeather API
     # --------------------------------------------------
 
-    geocoding_url = "https://geocoding-api.open-meteo.com/v1/search"
+    api_key = os.environ.get("OPENWEATHER_API_KEY")
 
-    geocoding_params = {
-        "name": city,
-        "count": 1,
-        "language": "en",
-        "format": "json"
-    }
-
-
-    try:
-
-        geocoding_response = requests.get(
-    geocoding_url,
-    params=geocoding_params,
-    headers={
-        "User-Agent": "AeroCast/1.0"
-    },
-    timeout=10
-)
-
-        geocoding_response.raise_for_status()
-
-        geocoding_data = geocoding_response.json()
-
-
-    except requests.RequestException:
+    if not api_key:
 
         return jsonify({
-            "error": "Unable to connect to location service"
+            "error": "Weather API key is not configured"
         }), 500
 
 
-    # --------------------------------------------------
-    # Check if city exists
-    # --------------------------------------------------
-
-    if "results" not in geocoding_data:
-
-        return jsonify({
-            "error": "City not found"
-        }), 404
-
-
-    location = geocoding_data["results"][0]
-
-    latitude = location["latitude"]
-    longitude = location["longitude"]
-
-
-    # --------------------------------------------------
-    # STEP 2: Get weather using latitude & longitude
-    # --------------------------------------------------
-
-    weather_url = "https://api.open-meteo.com/v1/forecast"
+    weather_url = "https://api.openweathermap.org/data/2.5/weather"
 
     weather_params = {
 
-        "latitude": latitude,
+        "q": city,
 
-        "longitude": longitude,
+        "appid": api_key,
 
-        "current": (
-            "temperature_2m,"
-            "relative_humidity_2m,"
-            "wind_speed_10m,"
-            "weather_code"
-        ),
+        "units": "metric"
 
-        "timezone": "auto"
     }
 
 
     try:
 
         weather_response = requests.get(
-    weather_url,
-    params=weather_params,
-    headers={
-        "User-Agent": "AeroCast/1.0"
-    },
-    timeout=10
-)
+            weather_url,
+            params=weather_params,
+            timeout=10
+        )
 
         weather_response.raise_for_status()
 
         weather_data = weather_response.json()
+
 
     except requests.RequestException as error:
 
         print("WEATHER API ERROR:", repr(error), flush=True)
 
         return jsonify({
-            "error": "Unable to get weather data",
-            "details": repr(error)
+            "error": "Unable to get weather data"
         }), 500
 
 
- 
+    # --------------------------------------------------
+    # Extract weather information
+    # --------------------------------------------------
 
-    current_weather = weather_data["current"]
+    temperature = weather_data["main"]["temp"]
 
-    temperature = current_weather["temperature_2m"]
+    humidity = weather_data["main"]["humidity"]
 
-    humidity = current_weather["relative_humidity_2m"]
+    # OpenWeather gives wind speed in m/s.
+    # Convert it to km/h.
 
-    wind_speed = current_weather["wind_speed_10m"]
+    wind_speed = weather_data["wind"]["speed"] * 3.6
 
-    weather_code = current_weather["weather_code"]
+    condition = weather_data["weather"][0]["description"]
 
+    city_name = weather_data["name"]
 
-    # Convert weather code into readable condition
-    condition = get_weather_condition(weather_code)
+    country = weather_data["sys"]["country"]
 
 
     # --------------------------------------------------
-    # STEP 4: Send clean JSON to frontend
+    # Convert OpenWeather timestamp to local time
+    # --------------------------------------------------
+
+    from datetime import datetime, timezone, timedelta
+
+    timezone_offset = weather_data["timezone"]
+
+    local_time = datetime.fromtimestamp(
+        weather_data["dt"],
+        timezone.utc
+    ) + timedelta(seconds=timezone_offset)
+
+
+    # --------------------------------------------------
+    # Send clean JSON to frontend
     # --------------------------------------------------
 
     return jsonify({
 
-    "city": location["name"],
+        "city": city_name,
 
-    "country": location.get("country"),
+        "country": country,
 
-    "temperature": temperature,
+        "temperature": round(temperature, 1),
 
-    "humidity": humidity,
+        "humidity": humidity,
 
-    "wind_speed": wind_speed,
+        "wind_speed": round(wind_speed, 1),
 
-    "condition": condition,
+        "condition": condition.title(),
 
-    "local_time": current_weather["time"]
+        "local_time": local_time.strftime("%Y-%m-%d %H:%M")
 
-})
-
-
+    })
 # --------------------------------------------------
 # Start Flask server
 # --------------------------------------------------
 if __name__ == "__main__":
-    import os
+    
 
     port = int(os.environ.get("PORT", 5000))
 
