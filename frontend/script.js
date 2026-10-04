@@ -91,9 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // ------------------------------------
         // UPDATE MAP (Using lat & lon from backend)
         // ------------------------------------
-        if (data.lat && data.lon) {
-          const lat = parseFloat(data.lat);
-          const lon = parseFloat(data.lon);
+        if (data.latitude && data.longitude) {
+          const lat = parseFloat(data.latitude);
+          const lon = parseFloat(data.longitude);
           const newCoords = [lat, lon];
           
           map.setView(newCoords, 13);
