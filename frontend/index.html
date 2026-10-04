@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AeroCast — Weather Dashboard</title>
+<!-- Leaflet CSS CDN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -66,21 +68,22 @@
         </div>
       </section>
 
-      <!-- RIGHT: Storm card + stat cards -->
+      <!-- RIGHT: Map card + Stat cards -->
       <div class="right-column">
 
+        <!-- MAP CARD (Replaces storm card with matching container style) -->
         <section class="storm-card">
           <div class="storm-badge">
             <span class="storm-dot"></span>
-            <span>Active storm cell</span>
+            <span>Location map</span>
           </div>
 
-          <div class="storm-content">
-            <h2 class="storm-title">Thunderstorm Overcast</h2>
-            <p class="storm-desc">High lightning frequency detected over coordinates 37.7749°N, 122.4194°W. Prepare for brief precipitation spells.</p>
+          <div class="storm-content" style="padding-top: 0.5rem;">
+            <div id="map" class="weather-map"></div>
           </div>
         </section>
 
+        <!-- STAT CARDS (Humidity & Wind Speed) -->
         <div class="stat-cards">
           <div class="stat-card">
             <div class="stat-top">
@@ -115,6 +118,8 @@
 
   </div>
 
+<!-- Leaflet JS CDN -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

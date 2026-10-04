@@ -155,6 +155,8 @@ def get_weather():
     city_name = weather_data["name"]
 
     country = weather_data["sys"]["country"]
+    latitude = weather_data["coord"]["lat"]
+    longitude = weather_data["coord"]["lon"]
 
 
     # --------------------------------------------------
@@ -182,6 +184,10 @@ def get_weather():
         "country": country,
 
         "temperature": round(temperature, 1),
+
+        "latitude": latitude,
+
+        "longitude": longitude,
 
         "humidity": humidity,
 

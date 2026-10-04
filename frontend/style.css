@@ -569,3 +569,53 @@ body {
   }
 
 }
+/* Hourly Forecast Card Styling */
+.hourly-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 80px;
+    padding: 0.85rem;
+    border-radius: 0.85rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+}
+
+/* Custom scrollbar for hourly scroll */
+.hourly-container::-webkit-scrollbar {
+    height: 4px;
+}
+.hourly-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+/* Leaflet Map Dark Theme adjustment / Polish */
+.weather-map {
+    z-index: 1;
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background: #18181b !important;
+    color: #fff !important;
+    border-radius: 0.5rem !important;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+/* Ensure the map container has an explicit height and fits the card */
+#map, .weather-map {
+    width: 100%;
+    height: 280px !important; /* Forces the map to render at full height */
+    border-radius: 0.75rem;
+    overflow: hidden;
+    z-index: 1;
+    background: #18181b; /* Fallback background */
+}
+
+/* Ensure the storm-card content wrapper doesn't restrict height */
+.storm-card .storm-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem !important;
+}
