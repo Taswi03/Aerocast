@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // ------------------------------------
         // 2. UPDATE MAP TO SEARCHED LOCATION
         // ------------------------------------
-        if (data.lat && data.lon) {
-          const lat = parseFloat(data.lat);
-          const lon = parseFloat(data.lon);
+        if (data.latitude && data.longitude) {
+          const lat = parseFloat(data.latitude);
+          const lon = parseFloat(data.longitude);
           const newCoords = [lat, lon];
           
           // Move map view and move marker to new coordinates
