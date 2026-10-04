@@ -28,82 +28,63 @@ document.addEventListener('DOMContentLoaded', () => {
       .openPopup();
 
 
-  if (searchForm) {
-
+ if (searchForm) {
     searchForm.addEventListener('submit', async (e) => {
-
       e.preventDefault();
 
       const input = searchForm.querySelector('.search-input');
       const city = input.value.trim();
 
-      if (!city) {
-        return;
-      }
+      if (!city) return;
 
       console.log(`Searching weather for: ${city}`);
 
       try {
-
-        // Ask Flask for weather data
         const response = await fetch(
           `https://aerocast-ajfq.onrender.com/api/weather?city=${encodeURIComponent(city)}`
         );
-
-        // Convert response into JavaScript object
         const data = await response.json();
 
-        // If Flask returns an error
         if (!response.ok) {
           console.error(data.error);
-          alert(data.error);
+          alert(data.error || "City not found");
           return;
         }
 
         // ------------------------------------
-        // UPDATE CITY & TIME
+        // SAFE UI UPDATES (Won't crash if classes differ)
         // ------------------------------------
-        cityName.textContent = `${data.city}, ${data.country}`;
-        localTime.textContent = data.local_time;
+        if (cityName) cityName.textContent = `${data.city}, ${data.country}`;
+        if (localTime) localTime.textContent = data.local_time;
+        if (temperature) temperature.textContent = `${data.temperature}°`;
+        
+        if (statValues && statValues.length >= 2) {
+          statValues[0].textContent = `${data.humidity}%`;
+          statValues[1].textContent = `${data.wind_speed} km/h`;
+        }
+
+        if (stormTitle) stormTitle.textContent = data.condition;
+        if (weatherMessage) weatherMessage.textContent = `Current conditions: ${data.condition}`;
+        if (stormDescription) stormDescription.textContent = `Current weather conditions in ${data.city}.`;
 
         // ------------------------------------
-        // UPDATE TEMPERATURE
-        // ------------------------------------
-        temperature.textContent = `${data.temperature}°`;
-
-        // ------------------------------------
-        // UPDATE HUMIDITY & WIND SPEED
-        // ------------------------------------
-        statValues[0].textContent = `${data.humidity}%`;
-        statValues[1].textContent = `${data.wind_speed} km/h`;
-
-        // ------------------------------------
-        // UPDATE WEATHER CONDITION
-        // ------------------------------------
-        stormTitle.textContent = data.condition;
-        weatherMessage.textContent = `Current conditions: ${data.condition}`;
-        stormDescription.textContent = `Current weather conditions in ${data.city}.`;
-
-        // ------------------------------------
-        // 2. UPDATE MAP TO SEARCHED LOCATION
+        // UPDATE MAP (Using backend latitude & longitude)
         // ------------------------------------
         if (data.latitude && data.longitude) {
           const lat = parseFloat(data.latitude);
           const lon = parseFloat(data.longitude);
           const newCoords = [lat, lon];
           
-          // Move map view and move marker to new coordinates
           map.setView(newCoords, 13);
           marker.setLatLng(newCoords)
                 .bindPopup(`<b>${data.city}</b><br>Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`)
                 .openPopup();
           
-          // Fix map tile rendering bug inside grid containers
           setTimeout(() => { map.invalidateSize(); }, 200);
         }
 
         // ------------------------------------
-        // UPDATE HOURLY FORECAST (Safe Fallback)
+        // UPDATE HOURLY FORECAST
         // ------------------------------------
         if (hourlyContainer) {
           hourlyContainer.innerHTML = ''; 
@@ -129,9 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Error connecting to backend:", error);
         alert("Unable to connect to the weather server.");
       }
-
     });
-
   }
 
 });
