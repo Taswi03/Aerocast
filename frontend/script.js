@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const hourlyContainer = document.getElementById('hourlyForecast');
 
   // ------------------------------------
-  // 1. INITIALIZE LEAFLET MAP
+  // 1. INITIALIZE LEAFLET MAP (Default: SF)
   // ------------------------------------
   let defaultLat = 37.7749;
   let defaultLon = -122.4194;
@@ -72,13 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         temperature.textContent = `${data.temperature}°`;
 
         // ------------------------------------
-        // UPDATE HUMIDITY
+        // UPDATE HUMIDITY & WIND SPEED
         // ------------------------------------
         statValues[0].textContent = `${data.humidity}%`;
-
-        // ------------------------------------
-        // UPDATE WIND SPEED
-        // ------------------------------------
         statValues[1].textContent = `${data.wind_speed} km/h`;
 
         // ------------------------------------
@@ -89,19 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
         stormDescription.textContent = `Current weather conditions in ${data.city}.`;
 
         // ------------------------------------
-        // UPDATE MAP (Using lat & lon from backend)
+        // 2. UPDATE MAP TO SEARCHED LOCATION
         // ------------------------------------
-        if (data.latitude && data.longitude) {
-          const lat = parseFloat(data.latitude);
-          const lon = parseFloat(data.longitude);
+        if (data.lat && data.lon) {
+          const lat = parseFloat(data.lat);
+          const lon = parseFloat(data.lon);
           const newCoords = [lat, lon];
           
+          // Move map view and move marker to new coordinates
           map.setView(newCoords, 13);
           marker.setLatLng(newCoords)
                 .bindPopup(`<b>${data.city}</b><br>Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`)
                 .openPopup();
           
-          // Fix render alignment bug if container size shifted
+          // Fix map tile rendering bug inside grid containers
           setTimeout(() => { map.invalidateSize(); }, 200);
         }
 
@@ -109,8 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // UPDATE HOURLY FORECAST (Safe Fallback)
         // ------------------------------------
         if (hourlyContainer) {
-          hourlyContainer.innerHTML = ''; // Clear old items
-
+          hourlyContainer.innerHTML = ''; 
           if (data.hourly && data.hourly.length > 0) {
             data.hourly.forEach(hour => {
               const card = document.createElement('div');
@@ -123,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
               hourlyContainer.appendChild(card);
             });
           } else {
-            // Graceful message since you haven't built the hourly endpoint yet
             hourlyContainer.innerHTML = `<p style="font-size: 0.85rem; color: rgba(255,255,255,0.4); padding: 0.5rem; margin: 0;">Hourly forecast coming soon...</p>`;
           }
         }
