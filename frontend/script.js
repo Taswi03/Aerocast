@@ -27,13 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
       .bindPopup('<b>San Francisco</b><br>Current location')
       .openPopup();
 
-
- if (searchForm) {
+  if (searchForm) {
     searchForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const input = searchForm.querySelector('.search-input');
-      const city = input.value.trim();
+      const city = input ? input.value.trim() : '';
 
       if (!city) return;
 
@@ -52,15 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // ------------------------------------
-        // SAFE UI UPDATES (Won't crash if classes differ)
+        // SAFE UI UPDATES
         // ------------------------------------
         if (cityName) cityName.textContent = `${data.city}, ${data.country}`;
         if (localTime) localTime.textContent = data.local_time;
         if (temperature) temperature.textContent = `${data.temperature}°`;
         
         if (statValues && statValues.length >= 2) {
-          statValues[0].textContent = `${data.humidity}%`;
-          statValues[1].textContent = `${data.wind_speed} km/h`;
+          if (statValues[0]) statValues[0].textContent = `${data.humidity}%`;
+          if (statValues[1]) statValues[1].textContent = `${data.wind_speed} km/h`;
         }
 
         if (stormTitle) stormTitle.textContent = data.condition;
@@ -70,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // ------------------------------------
         // UPDATE MAP (Using backend latitude & longitude)
         // ------------------------------------
-        if (data.latitude && data.longitude) {
+        if (data.latitude !== undefined && data.longitude !== undefined) {
           const lat = parseFloat(data.latitude);
           const lon = parseFloat(data.longitude);
           const newCoords = [lat, lon];
@@ -107,10 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("AeroCast UI updated successfully!");
 
       } catch (error) {
-        console.error("Error connecting to backend:", error);
-        alert("Unable to connect to the weather server.");
+        console.error("Error connecting to backend or updating UI:", error);
+        alert("Unable to process weather data.");
       }
     });
   }
-
 });
